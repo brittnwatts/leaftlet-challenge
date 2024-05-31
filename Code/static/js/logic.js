@@ -1,6 +1,7 @@
-
+// declare url for daya retrieval
 let queryURL = "https://earthquake.usgs.gov/earthquakes/feed/v1.0/summary/all_week.geojson";
 
+// connect to D3
 d3.json(queryURL).then(function(data){
     createFeatures(data.features);
 });
@@ -8,20 +9,18 @@ d3.json(queryURL).then(function(data){
 // Define a function to run for each feature
 // Give each feature a popup that describes the earthquake
 function createFeatures(earthquakeData){
-
+    // this popup displays the place and time of the earthquake
     function onEachFeature(feature, layer) {
         layer.bindPopup(`<h3>${feature.properties.place}</h3><hr><p>${new Date(feature.properties.time)}</p`);
     };
-
-    // Create function to determine marker size based on magnitude
+    // this function determines the marker size based on the earthquake's magnitude
     function markerSize(magnitude){
         return magnitude * 4;
     };
-
+    // this function determines the marker color based on the depth of the earthquake
     function markerColor(depth){
         return depth > 90 ? 'red' : depth > 70 ? 'darkorange' : depth > 50 ? 'orange' : depth > 30 ? 'gold': depth > 10 ? 'yellow' : 'yellowgreen';
     };
-
 // create a GeoJSON layer that contains the features array and run the onEachFeature
     let earthquakes = L.geoJSON(earthquakeData, {
         pointToLayer: function(feature, coordinates){
